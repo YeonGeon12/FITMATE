@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>운동루틴 추천 결과</title>
+
+    <!-- 기존 meta 태그 제거 후 아래 input 추가 -->
+    <input type="hidden" id="userId" th:value="${SS_USER_ID}" />
+    <input type="hidden" id="height" th:value="${height}" />
+    <input type="hidden" id="weight" th:value="${weight}" />
+    <input type="hidden" id="gender" th:value="${gender}" />
+    <input type="hidden" id="goal" th:value="${goal}" />
+
+
+    <link rel="stylesheet" th:href="@{/css/exercisePlan.css}">
+</head>
+<body>
+<div class="container">
+    <img src="/img/Logo2.jpg" alt="로고" class="logo">
+
+    <h2>운동루틴 추천</h2>
+    <p class="subtitle">AI가 당신의 요구와 정보를 취합해 일주일의 루틴을 만들었습니다.</p>
+
+    <!-- ✅ 운동 루틴 결과 표 -->
+    <table class="routine-table">
+        <thead>
+        <tr>
+            <th>요일</th>
+            <th>루틴명</th>
+            <th>주요 운동 구성</th>
+            <th>예상 소요 시간</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="plan : ${planList}" class="plan-box">
+            <td th:text="${plan.day}">월요일</td>
+            <td th:text="${plan.routineTitle}">전신 루틴</td>
+            <td>
+                <ul>
+                    <li th:each="item : ${plan.routineDetail}" th:text="${item}">운동1</li>
+                </ul>
+            </td>
+            <td th:text="${plan.estimatedTime}">30분</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="btn-box">
+        <button class="recommend-btn" onclick="location.href='/exercise/exerciseInfoForm'">다시 추천 받기</button>
+        <button class="recommend-btn" onclick="saveExercise()">저장</button>
+        <button class="recommend-btn" onclick="location.href='/index'">홈으로</button>
+    </div>
+</div>
+
+<!-- ✅ 저장 스크립트 -->
+<script>
+    function saveExercise() {
+        // 기존 meta → input 기반으로 데이터 추출
+        const userId = document.getElementById("userId")?.value;
+        const height = parseInt(document.getElementById("height")?.value);
+        const weight = parseInt(document.getElementById("weight")?.value);
+        const gender = document.getElementById("gender")?.value;
+        const goal = document.getElementById("goal")?.value;
+
+        if (!userId || isNaN(height) || isNaN(weight) || !gender || !goal) {
+            alert("❌ 필수 정보가 누락되었거나 유효하지 않습니다.");
+            return;
+        }
+
+        const planList = [];
+        document.querySelectorAll(".plan-box").forEach(box => {
+            const day = box.children[0]?.innerText.trim();
+            const title = box.children[1]?.innerText.trim();
+            const detailItems = box.children[2]?.querySelectorAll("li") || [];
+            const estimatedTime = box.children[3]?.innerText.trim();
+
+            const routineDetail = Array.from(detailItems).map(li => li.innerText.trim());
+
+            planList.push({
+                day: day,
+                routineTitle: title,
+                routineDetail: routineDetail,
+                estimatedTime: estimatedTime
+            });
+        });
+
+        const payload = {
+            userId: userId,
+            height: height,
+            weight: weight,
+            gender: gender,
+            goal: goal,
+            routineList: planList
+        };
+
+        fetch("/api/exercise/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+            .then(res => {
+                if (res.ok) {
+                    alert("✅ 운동 루틴이 성공적으로 저장되었습니다.");
+                    window.location.href = "/history/recordList"; // ← 여기 수정
+                } else {
+                    return res.text().then(text => {
+                        alert("❌ 저장 실패: " + text);
+                    });
+                }
+            })
+                .catch(err => {
+                console.error("❌ 저장 중 오류 발생:", err);
+                alert("서버 오류가 발생했습니다.");
+            });
+    }
+</script>
+</body>
+</html>

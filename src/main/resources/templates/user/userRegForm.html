@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FITMATE - 회원가입</title>
+    <link rel="stylesheet" href="/css/userRegForm.css">
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        let userIdCheck = "Y";
+        let mailAuthCheck = "N";
+
+        $(document).ready(function () {
+            const f = document.getElementById("f");
+
+            $("#btnUserId").on("click", function () {
+                userIdExists(f);
+            });
+
+            $("#btnSend").on("click", function () {
+                doSubmit(f);
+            });
+
+            $("#btnMail").on("click", function () {
+                sendAuthMail();
+            });
+
+            $("#btnAuth").on("click", function () {
+                confirmAuthNumber();
+            });
+        });
+
+        function userIdExists(f) {
+            if (f.userId.value === "") {
+                alert("아이디를 입력하세요.");
+                f.userId.focus();
+                return;
+            }
+
+            $.ajax({
+                url: "/user/getUserIdExists",
+                type: "post",
+                dataType: "JSON",
+                data: $("#f").serialize(),
+                success: function (json) {
+                    if (json.existsYn === "Y") {
+                        alert("이미 가입된 아이디입니다.");
+                        f.userId.focus();
+                    } else {
+                        alert("사용 가능한 아이디입니다.");
+                        userIdCheck = "N";
+                    }
+                }
+            });
+        }
+
+        function sendAuthMail() {
+            const email = $("input[name=email]").val();
+
+            if (email === "") {
+                alert("이메일을 입력하세요.");
+                return;
+            }
+
+            const authNumber = Math.floor(100000 + Math.random() * 900000);
+            window.sessionStorage.setItem("authNumber", authNumber); // 인증번호 임시 저장
+
+            $.ajax({
+                url: "/mail/sendMail",
+                type: "post",
+                data: {
+                    toMail: email,
+                    title: "FitMate 회원가입 인증번호입니다.",
+                    contents: `인증번호는 [${authNumber}]입니다.`
+                },
+                success: function (res) {
+                    if (res.msg && res.msg.includes("발송")) {
+                        alert("인증 메일을 발송했습니다!");
+                    } else {
+                        alert("메일 발송에 실패했습니다.");
+                    }
+                },
+                error: function (xhr) {
+                    alert("서버 오류로 메일 발송에 실패했습니다.");
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+        function confirmAuthNumber() {
+            const inputAuth = $("input[name=authNumber]").val();
+            const storedAuth = window.sessionStorage.getItem("authNumber");
+
+            if (!inputAuth) {
+                alert("인증번호를 입력하세요.");
+                return;
+            }
+
+            if (inputAuth === storedAuth) {
+                alert("이메일 인증이 완료되었습니다!");
+                mailAuthCheck = "Y";
+            } else {
+                alert("인증번호가 일치하지 않습니다.");
+            }
+        }
+
+        function doSubmit(f) {
+            if (f.userId.value === "") {
+                alert("아이디를 입력하세요.");
+                f.userId.focus();
+                return;
+            }
+            if (userIdCheck !== "N") {
+                alert("아이디 중복체크를 해주세요.");
+                f.userId.focus();
+                return;
+            }
+            if (f.userName.value === "") {
+                alert("이름을 입력하세요.");
+                f.userName.focus();
+                return;
+            }
+            if (f.password.value === "") {
+                alert("비밀번호를 입력하세요.");
+                f.password.focus();
+                return;
+            }
+            if (f.password2.value === "") {
+                alert("비밀번호 확인을 입력하세요.");
+                f.password2.focus();
+                return;
+            }
+            if (f.password.value !== f.password2.value) {
+                alert("비밀번호가 일치하지 않습니다.");
+                f.password.focus();
+                return;
+            }
+            if (f.email.value === "") {
+                alert("이메일을 입력하세요.");
+                f.email.focus();
+                return;
+            }
+            if (mailAuthCheck !== "Y") {
+                alert("이메일 인증을 완료하세요.");
+                return;
+            }
+
+            $.ajax({
+                url: "/user/insertUserInfo",
+                type: "post",
+                dataType: "JSON",
+                data: $("#f").serialize(),
+                success: function (json) {
+                    if (json.result === 1) {
+                        alert(json.msg);
+                        location.href = "/user/login";
+                    } else {
+                        alert(json.msg);
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Ajax Error!!", xhr.responseText);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+<img src="/img/Logo2.jpg" alt="로고" class="signup-logo">
+
+<div class="signup-container">
+    <h2 class="signup-title">회원가입</h2>
+
+    <form id="f">
+        <div class="form-group">
+            <input type="text" name="userId" placeholder="ID는 6~20자 이내로 입력해 주세요.">
+            <button id="btnUserId" type="button">중복 확인</button>
+        </div>
+
+        <div class="form-group">
+            <input type="password" name="password" placeholder="비밀번호는 문자, 숫자, 특수문자 포함 6~20자 입력">
+        </div>
+
+        <div class="form-group">
+            <input type="password" name="password2" placeholder="비밀번호를 다시 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <input type="text" name="userName" placeholder="이름을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <input type="email" name="email" placeholder="이메일 입력">
+            <button id="btnMail" type="button">인증 메일 받기</button>
+        </div>
+
+        <div class="form-group">
+            <input type="text" name="authNumber" placeholder="인증번호 입력">
+            <button id="btnAuth" type="button">인증 확인</button>
+        </div>
+
+        <button id="btnSend" type="button" class="signup-button">회원가입</button>
+
+        <div class="login-link">
+            이미 회원이신가요? <a href="/user/login">로그인으로</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+/* 전체 배경 */
+body {
+    background-color: #FFFFFF;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 로고 이미지 */
+.signup-logo {
+    display: block;
+    margin: 40px auto 10px auto;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* 전체 컨테이너 */
+.signup-container {
+    width: 400px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    border: 5px solid #ff4d4d;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 제목 */
+.signup-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* 입력 필드 및 버튼 그룹 */
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* 버튼 공통 */
+.signup-container button {
+    background-color: #ff4d4d;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.signup-container button:hover {
+    background-color: #e63c3c;
+}
+
+/* 회원가입 버튼 전용 */
+.signup-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px 0;
+    font-size: 16px;
+}
+
+/* 로그인 링크 */
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.login-link a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}

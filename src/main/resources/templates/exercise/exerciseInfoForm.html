@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>운동 추천 정보 입력</title>
+    <link rel="stylesheet" th:href="@{/css/exerciseInfoForm.css}">
+</head>
+<body>
+<div class="container">
+    <div class="form-box">
+        <img src="/img/Logo2.jpg" alt="로고" class="logo">
+        <h2>운동 추천 정보 입력</h2>
+
+        <form id="f" action="/exercise/exercisePlan" method="post" onsubmit="return validateForm()">
+            <!-- 로그인 사용자 ID -->
+            <input type="hidden" name="userId" th:value="${session.SS_USER_ID}" />
+
+            <!-- 키 입력 -->
+            <label for="height">키(cm)</label>
+            <input type="number" id="height" name="height" required min="50" max="250">
+
+            <!-- 몸무게 입력 -->
+            <label for="weight">몸무게(kg)</label>
+            <input type="number" id="weight" name="weight" required min="20" max="200">
+
+            <!-- 성별 선택 -->
+            <div class="form-section">
+                <p>성별</p>
+                <div class="radio-group">
+                    <input type="radio" id="gender-m" name="gender" value="남" required>
+                    <label for="gender-m">남</label>
+
+                    <input type="radio" id="gender-f" name="gender" value="여">
+                    <label for="gender-f">여</label>
+
+                    <input type="radio" id="gender-etc" name="gender" value="기타">
+                    <label for="gender-etc">기타</label>
+
+                </div>
+            </div>
+
+            <!-- 운동 수준 -->
+            <div class="form-section">
+                <p>운동 수준</p>
+                <div class="radio-group">
+                    <input type="radio" id="level1" name="level" value="초보" required>
+                    <label for="level1">초보</label>
+
+                    <input type="radio" id="level2" name="level" value="중수">
+                    <label for="level2">중수</label>
+
+                    <input type="radio" id="level3" name="level" value="고수">
+                    <label for="level3">고수</label>
+                </div>
+            </div>
+
+            <!-- 운동 목표 -->
+            <div class="form-section">
+                <p>운동 목표</p>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="goal1" name="goal" value="다이어트">
+                    <label for="goal1">다이어트</label>
+
+                    <input type="checkbox" id="goal2" name="goal" value="체력 향상">
+                    <label for="goal2">체력 향상</label>
+
+                    <input type="checkbox" id="goal3" name="goal" value="근력 향상">
+                    <label for="goal3">근력 향상</label>
+
+                    <input type="checkbox" id="goal4" name="goal" value="기타">
+                    <label for="goal4">기타</label>
+                </div>
+            </div>
+
+
+            <button type="submit" class="submit-btn">운동 추천 받기</button>
+        </form>
+
+        <!-- 돌아가기 버튼 -->
+        <div class="back-link">
+            <a href="/index">← 돌아가기</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        const checked = document.querySelectorAll('input[name="goal"]:checked');
+        if (checked.length === 0) {
+            alert("운동 목표를 하나 이상 선택해 주세요.");
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

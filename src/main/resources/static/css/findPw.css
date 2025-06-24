@@ -1,0 +1,66 @@
+body {
+    background-color: #FFFFFF;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 30px;
+}
+
+.form-box {
+    background-color: white;
+    border: 6px solid #ff3B30;
+    border-radius: 20px;
+    padding: 40px 50px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-box h2 {
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    background-color: #ff3B30;
+    color: black;
+    border: 2px solid #000;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.confirm-btn:hover {
+    background-color: #e03232;
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>FitMate</title>
+
+  <!-- CSS 및 FullCalendar 스타일 -->
+  <link rel="stylesheet" th:href="@{/css/indexLogin.css}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" />
+
+  <!-- 사용자 ID 전달용 메타태그 -->
+  <meta name="user-id" th:content="${SS_USER_ID}" />
+</head>
+<body>
+
+<!-- ✅ 네비게이션 바 -->
+<div class="navbar">
+  <div class="nav-left"><div class="nav-logo"></div></div>
+  <ul class="nav-center">
+    <li><a th:href="@{/exercise/exerciseInfoForm}"><img th:src="@{/img/dumbbell.png}" alt="운동"> 운동 추천 받기</a></li>
+    <li><a th:href="@{/history/recordList}"><img th:src="@{/img/history.png}" alt="기록"> 내 기록 보기</a></li>
+    <li><a th:href="@{/diet/dietInfoForm}"><img th:src="@{/img/serving.png}" alt="식단"> 식단 추천 받기</a></li>
+    <li><a th:href="@{/user/myPage}"><img th:src="@{/img/user.png}" alt="마이페이지">MyPage</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="logout-button" onclick="logout()">로그아웃</div>
+  </div>
+</div>
+
+<!-- 본문 -->
+<div class="main-container">
+  <div class="left-panel">
+    <div class="panel-button" onclick="location.href='/exercise/exerciseInfoForm'">운동 추천 받기</div>
+    <div class="panel-button" onclick="location.href='/diet/dietInfoForm'">식단 추천 받기</div>
+  </div>
+
+  <div class="calendar-box">
+    <div class="calendar-title">운동 일정</div>
+    <div id="calendar"></div>
+  </div>
+</div>
+
+<!-- FullCalendar JS -->
+<script th:src="@{/js/fullcalendar/packages/core/index.global.min.js}"></script>
+<script th:src="@{/js/fullcalendar/packages/daygrid/index.global.min.js}"></script>
+<script th:src="@{/js/fullcalendar/packages/core/locales/ko.global.min.js}"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const userId = document.querySelector('meta[name="user-id"]').content;
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'ko',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: ''
+      },
+      contentHeight: 'auto',
+      eventDisplay: 'block',
+
+      // ✅ 사용자별 운동 수행 데이터 로딩
+      events: function (info, successCallback, failureCallback) {
+        fetch(`/calendar/data?userId=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                  successCallback(data);
+                })
+                .catch(error => {
+                  console.error("❌ 운동 기록 로딩 실패:", error);
+                  failureCallback(error);
+                });
+      }
+    });
+
+    calendar.render();
+  });
+</script>
+
+<!-- 로그아웃 처리 -->
+<script>
+  function logout() {
+    fetch('/user/logoutProc', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => {
+              if (!response.ok) throw new Error("서버 응답 오류");
+              return response.json();
+            })
+            .then(data => {
+              if (data.result === 1) {
+                alert(data.msg);
+                window.location.href = "/index";
+              } else {
+                alert("로그아웃에 실패했습니다.");
+              }
+            })
+            .catch(error => {
+              console.error("로그아웃 요청 실패:", error);
+              alert("서버 오류로 로그아웃이 실패했습니다.");
+            });
+  }
+</script>
+
+</body>
+</html>

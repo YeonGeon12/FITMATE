@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FitMate 로그인</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // 로그인 버튼 클릭 시 AJAX 호출
+            $(".btn-login").on("click", function (e) {
+                e.preventDefault(); // 기본 form 제출 막기
+
+                $.ajax({
+                    url: "/user/loginProc",
+                    type: "post",
+                    data: $("#loginForm").serialize(),
+                    success: function (res) {
+                        if (res.result === 1) {
+                            alert(res.msg);
+                            location.href = "/index";  // ✅ MainController가 분기 처리함
+                        } else {
+                            alert(res.msg);
+                        }
+                    },
+                    error: function () {
+                        alert("서버 오류로 로그인에 실패했습니다.");
+                    }
+                });
+            });
+
+            $(".btn-signup").on("click", function () {
+                location.href = "/user/userRegForm";
+            });
+        });
+    </script>
+</head>
+<body>
+<img src="/img/Logo2.jpg" alt="FitMate 로고" class="logo">
+
+<div class="login-container">
+    <form id="loginForm" method="post">
+        <div class="mb-3">
+            <label for="userId">아이디:</label>
+            <input type="text" id="userId" name="userId" class="form-control" placeholder="아이디를 입력하세요.">
+        </div>
+        <div class="mb-3">
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력하세요.">
+        </div>
+        <button type="submit" class="btn-login">로그인</button>
+        <button type="button" class="btn-signup">회원가입</button>
+    </form>
+</div>
+
+<div class="notice">아이디와 비밀번호가 기억나지 않으신가요?</div>
+<div class="links">
+    <a href="/user/findId">아이디 찾기</a>
+    <a href="/user/findPw">비밀번호 찾기</a>
+</div>
+</body>
+</html>

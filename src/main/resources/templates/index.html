@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FitMate</title>
+    <!-- 사용자 정의 CSS -->
+    <link rel="stylesheet" href="/css/index.css">
+    <!-- 또는 계속 CDN으로 사용 가능 -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css' rel='stylesheet' />
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<div class="navbar">
+    <div class="nav-left">
+        <div class="nav-logo"></div>
+        <div class="nav-button" onclick="requireLoginAlert()">
+            <img src="/img/dumbbell.png" alt="운동 아이콘"> 운동 추천 받기
+        </div>
+        <div class="nav-button" onclick="requireLoginAlert()">
+            <img src="/img/history.png" alt="기록 아이콘"> 나의 기록 보기
+        </div>
+        <div class="nav-button" onclick="requireLoginAlert()">
+            <img src="/img/serving.png" alt="식단 아이콘"> 식단 추천 받기
+        </div>
+    </div>
+    <div class="login-button" onclick="goToLogin()">로그인</div>
+</div>
+
+<!-- 본문 -->
+<div class="main-container">
+    <div class="left-panel">
+        <div class="panel-button" onclick="requireLoginAlert()">운동 추천 받기</div>
+        <div class="panel-button" onclick="requireLoginAlert()">식단 추천 받기</div>
+    </div>
+    <div class="calendar-box">
+        <div class="calendar-title">운동 일정</div>
+        <div id="calendar"></div>
+    </div>
+</div>
+
+<!-- FullCalendar JS (로컬) -->
+<script src="/js/fullcalendar/packages/core/index.global.min.js"></script>
+<script src="/js/fullcalendar/packages/daygrid/index.global.min.js"></script>
+<script src="/js/fullcalendar/packages/core/locales/ko.global.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            // FullCalendar 옵션 설정
+            initialView: 'dayGridMonth', // 월간 뷰
+            locale: 'ko', // 한국어 설정
+            headerToolbar: { // 헤더 툴바 설정 (이미지와 유사하게)
+                left: 'prev,next today',
+                center: 'title',
+                right: '' // 오른쪽 버튼 없음
+            },
+            contentHeight: 'auto' // 컨텐츠 높이 자동 조절
+        });
+        calendar.render();
+    });
+</script>
+<script>
+    function requireLoginAlert() {
+        alert("로그인 후 이용 가능합니다.");
+        // 새로고침 또는 index.html로 강제 이동
+        window.location.href = "index";  // 상대경로 기준 (templates 아래인 경우 조정 필요)
+    }
+</script>
+<script>
+    function goToLogin() {
+        location.href = "/user/login";  // 경로는 구조에 맞게 조정
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>식단 추천 입력</title>
+  <link rel="stylesheet" th:href="@{/css/dietInfoForm.css}">
+</head>
+<body>
+<div class="container">
+  <div class="form-box">
+    <img src="/img/Logo2.jpg" alt="로고" class="logo">
+    <h2>식단 추천 정보 입력</h2>
+
+    <form action="/diet/dietPlan" method="post" onsubmit="return validateDietForm()">
+      <!-- ✅ 로그인 사용자 ID 전달 -->
+      <input type="hidden" name="userId" th:value="${session.SS_USER_ID}" />
+
+      <div class="diet-options">
+        <label>
+          <input type="radio" name="dietType" value="칼로리 조절식" required>
+          <span class="option-text">칼로리 조절식</span>
+        </label>
+        <label>
+          <input type="radio" name="dietType" value="균형 잡힌 식사">
+          <span class="option-text">균형 잡힌 식사</span>
+        </label>
+        <label>
+          <input type="radio" name="dietType" value="고단백 식사">
+          <span class="option-text">고단백 식사</span>
+        </label>
+        <label>
+          <input type="radio" name="dietType" value="저탄수화물 식사">
+          <span class="option-text">저탄수화물 식사</span>
+        </label>
+      </div>
+
+      <div class="btn-box">
+        <button type="submit" class="submit-btn">식단 추천 받기</button>
+      </div>
+    </form>
+
+    <div class="back-box">
+      <a href="/index" class="back-link">← 돌아가기</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function validateDietForm() {
+    const selected = document.querySelector('input[name="dietType"]:checked');
+    if (!selected) {
+      alert("식단 유형을 선택해 주세요.");
+      return false;
+    }
+    return true;
+  }
+</script>
+</body>
+</html>

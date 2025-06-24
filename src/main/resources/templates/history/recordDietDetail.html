@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>식단 상세보기</title>
+    <link rel="stylesheet" href="/css/recordDietDetail.css">
+</head>
+<body>
+<div class="container">
+    <img src="/img/Logo2.jpg" alt="로고" class="logo">
+    <h2>식단 추천</h2>
+    <p class="sub">회원님의 일주일 식단입니다.</p>
+
+    <div class="diet-table">
+        <table class="routine-table">
+            <thead>
+            <tr>
+                <th>요일</th>
+                <th>식사</th>
+                <th>메뉴</th>
+                <th>칼로리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- ✅ day, plans로 받아서 내부에서 사용 -->
+            <th:block th:each="entry : ${groupedMealPlan}">
+                <tr>
+                    <td th:rowspan="${#lists.size(entry.value)}" th:text="${entry.key}">월요일</td>
+                    <td th:text="${entry.value[0].mealTime}">아침</td>
+                    <td th:text="${entry.value[0].menu}">식단</td>
+                    <td th:text="${entry.value[0].calories}">400</td>
+                </tr>
+                <tr th:each="plan, stat : ${entry.value}" th:if="${!stat.first}">
+                    <td th:text="${plan.mealTime}">점심</td>
+                    <td th:text="${plan.menu}">식단</td>
+                    <td th:text="${plan.calories}">500</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn-box">
+        <button class="back-btn" onclick="goBack()">돌아가기</button>
+        <button class="delete-btn" onclick="deleteRecord('diet')">이 식단 지우기</button>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const recordId = /*[[${record.id}]]*/ 'RECORD_ID_PLACEHOLDER';
+
+    function goBack() {
+        window.location.href = "/history/recordList";
+    }
+
+    function deleteRecord(type) {
+        if (!confirm("정말 식단 루틴을 삭제하시겠습니까?")) return;
+
+        fetch(`/api/history/${recordId}?type=${type}`, { method: "DELETE" })
+            .then(res => {
+                if (res.ok) {
+                    alert("✅ 삭제 완료되었습니다.");
+                    goBack();
+                } else {
+                    alert("❌ 삭제 실패하였습니다.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("❌ 서버 오류로 인해 삭제를 실패하였습니다.");
+            });
+    }
+</script>
+</body>
+</html>

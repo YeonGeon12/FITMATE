@@ -1,0 +1,145 @@
+
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #FFFFFF;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #D9D9D9;
+  border-bottom: 3px solid #000000; /* ✅ 기존 회색선 → 검정 실선으로 변경 */
+  position: relative;
+  height: 110px; /* 기존보다 키움 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px; /* 메뉴 사이 간격 늘림 */
+}
+
+.nav-logo {
+  height: 100px;
+  width: 100px;
+  background-image: url("../img/Logo1.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.nav-button {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111;
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-button img {
+  height: 24px;  /* ✅ 적절한 높이 설정 */
+  width: auto;   /* 비율 유지 */
+  margin-right: 10px;
+  object-fit: contain;  /* 혹시나 비정상 크기 방지 */
+  max-height: 40px;     /* 최대 높이 제한 (선택사항) */
+}
+
+
+.nav-button:hover {
+  color: #2d77ff;
+  border-bottom: 2px solid #2d77ff;
+}
+
+.login-button {
+  position: absolute;
+  right: 40px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease; /* ✅ 부드러운 전환 */
+}
+
+.login-button:hover {
+  color: #2d77ff; /* 텍스트 색상 강조 */
+  text-decoration: underline; /* 밑줄로 피드백 */
+  transform: scale(1.05); /* 살짝 확대 */
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  padding-top: 50px; /* ✅ 적당히 위로 올림 */
+}
+
+
+.calendar-box {
+  border: 2px solid #000;
+  border-radius: 15px;
+  padding: 20px;
+  background-color: #fff;
+  width: 680px; /* 기존보다 넓게 유지 */
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;           /* ✅ 카드 사이 간격 확대 (기존 30px → 50px) */
+  margin-top: 110px;   /* ✅ 이미 사용자 요청대로 내려감 */
+  margin-left: 50px; /* ✅ 오른쪽으로 이동 */
+}
+
+.panel-button {
+  width: 350px;
+  height: 250px;
+  background-color: #dcdcdc;
+  border: 3px solid #000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  transition: all 0.2s ease; /* ✅ 부드러운 애니메이션 */
+}
+
+.panel-button:hover {
+  background-color: #cfcfcf; /* ✅ 배경색 약간 어둡게 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* ✅ 그림자 추가 */
+  transform: scale(1.03); /* ✅ 살짝 확대 */
+}
+
+
+.calendar-box {
+  border: 2px solid #000;
+  border-radius: 15px;
+  padding: 15px;
+  width: 700px; /* ✅ 캘린더보다 넓게 설정 */
+}
+
+.calendar-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#calendar {
+  width: 100%;
+  max-width: 640px;
+  font-size: 15px;
+}

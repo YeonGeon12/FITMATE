@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기 결과</title>
+    <link rel="stylesheet" th:href="@{/css/findIdSuccess.css}">
+</head>
+<body>
+<div class="container">
+    <img src="/img/Logo2.jpg" alt="로고" class="logo">
+
+    <div class="result-box">
+        <h2>아이디 찾기</h2>
+
+        <div class="result-row">
+            <label>회원님의 아이디:</label>
+            <span class="userid" th:text="${userId}">아이디 출력</span>
+        </div>
+
+        <button class="login-btn" onclick="goToLogin()">로그인</button>
+    </div>
+</div>
+
+<script>
+    function goToLogin() {
+        location.href = "/user/login";
+    }
+</script>
+</body>
+</html>

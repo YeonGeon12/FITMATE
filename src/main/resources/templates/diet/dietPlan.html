@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>식단 추천 결과</title>
+
+    <!-- 사용자 정보 전달 -->
+    <input type="hidden" id="userId" th:value="${SS_USER_ID}" />
+    <input type="hidden" id="dietType" th:value="${dietType}" />
+
+    <link rel="stylesheet" th:href="@{/css/dietPlan.css}">
+</head>
+<body>
+<div class="container">
+    <img src="/img/Logo2.jpg" alt="로고" class="logo">
+
+    <h2>식단 추천</h2>
+    <p class="subtitle">AI가 당신의 요구를 반영해 일주일 식단을 구성했습니다.</p>
+
+    <div class="diet-table">
+        <table id="dietTable">
+            <thead>
+            <tr>
+                <th>요일</th>
+                <th>식사</th>
+                <th>식단</th>
+                <th>칼로리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="entry : ${groupedByDay}">
+                <!-- 첫 번째 줄 (요일 + 첫 번째 식사) -->
+                <tr>
+                    <td th:rowspan="${#lists.size(entry.value)}" th:text="${entry.key}">월요일</td>
+                    <td th:text="${entry.value[0].mealTime}">아침</td>
+                    <td th:text="${entry.value[0].menu}">식단</td>
+                    <td th:text="${entry.value[0].calories}">400</td>
+                </tr>
+                <!-- 나머지 줄 (점심, 저녁 등) -->
+                <tr th:each="plan, stat : ${entry.value}" th:if="${!stat.first}">
+                    <td th:text="${plan.mealTime}">점심</td>
+                    <td th:text="${plan.menu}">식단</td>
+                    <td th:text="${plan.calories}">500</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn-box" style="margin-top: 20px;">
+        <button onclick="location.href='/diet/dietInfoForm'">다시 추천 받기</button>
+        <button class="recommend-btn" onclick="saveDiet()">저장</button>
+        <button onclick="location.href='/index'">홈으로</button>
+    </div>
+</div>
+
+<!-- ✅ 저장 스크립트 -->
+<script>
+    function saveDiet() {
+        const userId = document.getElementById("userId")?.value;
+        const dietType = document.getElementById("dietType")?.value;
+
+        if (!userId || !dietType) {
+            alert("❌ 필수 정보가 누락되었습니다.");
+            return;
+        }
+
+        const planList = [];
+        const rows = document.querySelectorAll("#dietTable tbody tr");
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const day = (cells.length === 4) ? cells[0].innerText.trim() : null;
+            const offset = (cells.length === 4) ? 0 : -1;
+
+            planList.push({
+                day: day || planList[planList.length - 1].day,
+                mealTime: cells[1 + offset].innerText.trim(),
+                menu: cells[2 + offset].innerText.trim(),
+                calories: parseInt(cells[3 + offset].innerText.trim(), 10)
+            });
+        });
+
+        const payload = {
+            userId: userId,
+            dietType: dietType,
+            mealPlanList: planList
+        };
+
+        fetch("/history/diet/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        }).then(res => {
+            if (res.ok) {
+                alert("✅ 식단이 성공적으로 저장되었습니다.");
+                window.location.href = "/history/recordList";
+            } else {
+                return res.text().then(text => {
+                    alert("❌ 저장 실패: " + text);
+                });
+            }
+        }).catch(err => {
+            console.error("❌ 저장 중 오류 발생:", err);
+            alert("서버 오류가 발생했습니다.");
+        });
+    }
+</script>
+</body>
+</html>

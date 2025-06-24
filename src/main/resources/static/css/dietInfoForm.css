@@ -1,0 +1,74 @@
+.container {
+    width: 400px;
+    margin: 60px auto;
+    padding: 30px;
+    border: 4px solid #ff3B30;
+    border-radius: 20px;
+    background-color: white;
+    text-align: center;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.diet-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.diet-options label {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.diet-options input[type="radio"] {
+    margin-right: 8px;
+}
+
+.diet-options label:hover {
+    border-color: #e74c3c;
+    background-color: #fef1f0;
+}
+
+.submit-btn {
+    background-color: #ff3B30;
+    color: black;
+    border: none;
+    padding: 14px 0;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #c0392b;
+}
+
+.back-box {
+    margin-top: 15px;
+}
+
+.back-link {
+    color: #444;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}

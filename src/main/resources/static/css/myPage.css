@@ -1,0 +1,86 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Apple SD Gothic Neo', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+.card {
+    background-color: white;
+    border: 6px solid #ff3B30;
+    border-radius: 20px;
+    padding: 40px; /* 내부 여백 증가 */
+    width: 420px;  /* ✅ 박스 폭 증가 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-inside {
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.card h2 {
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.card label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 12px 0 5px;
+}
+
+.card input {
+    width: 100%;
+    height: 40px; /* ✅ 높이 고정 */
+    padding: 0 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
+    box-sizing: border-box; /* ✅ padding 포함한 너비 계산 */
+}
+
+
+.card button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.card button:hover {
+    background-color: #f2f2f2;
+    border-color: #999;
+    transition: 0.2s ease-in-out;
+}
+
+.card .danger {
+    background-color: #ff3B30;
+    color: black;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.card .danger:hover {
+    background-color: #e22b24;
+    box-shadow: 0 0 5px rgba(255, 59, 48, 0.5);
+    transition: 0.2s ease-in-out;
+}
