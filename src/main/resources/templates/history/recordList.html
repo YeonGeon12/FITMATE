@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>나의 운동 루틴 및 식단 기록</title>
+  <link rel="stylesheet" href="/css/history.css">
+  <meta name="user-id" th:content="${SS_USER_ID}" />
+</head>
+<body>
+<div class="container">
+  <img src="/img/Logo2.jpg" alt="로고" class="logo">
+  <h2>나의 운동 루틴 및 식단 보기</h2>
+  <p class="subtitle" id="recordCount">회원님의 운동 루틴 및 식단 기록은 0개입니다.</p>
+  <div id="recordList"></div>
+  <button class="home-btn" onclick="location.href='/index'">홈으로 돌아가기</button>
+</div>
+
+<script>
+  const userId = document.querySelector('meta[name="user-id"]')?.content;
+  const recordListEl = document.getElementById("recordList");
+  const recordCountEl = document.getElementById("recordCount");
+  let totalCount = 0;
+
+  function extractId(item) {
+    if (item._id && typeof item._id === 'object' && item._id.$oid) return item._id.$oid;
+    if (typeof item._id === 'string') return item._id;
+    if (item.id && typeof item.id === 'string') return item.id;
+    if (item.id && typeof item.id === 'object' && item.id.$oid) return item.id.$oid;
+    return null;
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  function renderSection(type, items) {
+    totalCount += items.length;
+    items.forEach(item => {
+      const id = extractId(item);
+      const row = document.createElement("div");
+      row.className = "record-row";
+      row.innerHTML = `
+        <div class="record-date">${formatDate(item.createdAt)}</div>
+        <div class="record-title">${type === 'diet' ? `[${item.dietType}] 식단 요청` : `[${item.goal}] 운동 루틴`}</div>
+        <div class="record-btn"><button onclick="goToDetail('${id}', '${type}')">상세보기</button></div>
+      `;
+      recordListEl.appendChild(row);
+    });
+  }
+
+  async function fetchHistory() {
+    try {
+      const [dietRes, exerciseRes] = await Promise.all([
+        fetch(`/api/history/diet/${userId}`),
+        fetch(`/api/history/exercise/${userId}`)
+      ]);
+
+      const dietData = await dietRes.json();
+      const exerciseData = await exerciseRes.json();
+
+      renderSection('diet', dietData);
+      renderSection('exercise', exerciseData);
+
+      recordCountEl.innerText = `회원님의 운동 루틴 및 식단 기록은 ${totalCount}개입니다.`;
+    } catch (err) {
+      console.error("❌ 기록 조회 중 오류 발생:", err);
+    }
+  }
+
+  function goToDetail(id, type) {
+    // ✅ Controller의 공통 진입 포인트로 요청 (템플릿 내에서 분기 처리)
+    window.location.href = `/history/recordDetail?id=${id}&type=${type}`;
+  }
+
+  fetchHistory();
+</script>
+</body>
+</html>
