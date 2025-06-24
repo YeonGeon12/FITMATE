@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'kopo'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JSON 데이터 처리 라이브러리 추가
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // 메일 발송 라이브러리 추가
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // MongoDB 접속을 위한 데이터 가져오기
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    // ✅ Thymeleaf 템플릿 엔진 사용을 위한 의존성 (HTML 기반 View 처리)
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // ✅ Spring MVC(Web) 기능 사용을 위한 의존성 (Controller, REST API 등)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // ✅ MyBatis를 Spring Boot에 통합하기 위한 라이브러리 (SQL 기반 Mapper 사용)
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // ✅ Lombok 어노테이션 지원 (e.g., @Getter, @Setter) - 컴파일 시에만 필요
+    compileOnly 'org.projectlombok:lombok'
+    // ✅ 개발 중 자동 재시작 기능 지원 (Hot Reload)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // ✅ MariaDB JDBC 드라이버 (DB 접속을 위해 실행 환경에서 필요)
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    // ✅ Lombok 어노테이션 처리기 (빌드 타임에서 사용)
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

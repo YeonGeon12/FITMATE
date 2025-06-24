@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원탈퇴 확인</title>
+  <link rel="stylesheet" href="/css/myPage.css"> <!-- 기존 스타일 재사용 -->
+  <style>
+    /* 사용자 경험 개선용 추가 스타일 */
+    .card h2 {
+      margin-top: 12px;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      line-height: 1.4;
+    }
+    .card label {
+      margin-bottom: 6px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    .card input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .card button {
+      margin-bottom: 10px;
+    }
+
+    .card input::placeholder {
+      color: #aaa;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .card input:focus::placeholder {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <img src="/img/Logo2.jpg" alt="로고" class="logo-inside">
+
+    <h2>회원탈퇴를 하려면<br>비밀번호를 입력해주세요.</h2>
+
+    <form action="/user/deleteProc" method="post">
+      <label for="password">비밀번호:</label>
+      <input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요." required>
+
+      <button type="submit" class="danger">회원탈퇴</button>
+    </form>
+
+    <button onclick="location.href='/user/myPage'">마이페이지로 돌아가기</button>
+  </div>
+</div>
+
+<!-- 탈퇴 메시지 알림 처리 -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  if ([[${message != null}]]) {
+    alert([[${message}]]);
+  }
+  /*]]>*/
+</script>
+</body>
+</html>
